@@ -3,24 +3,19 @@
 # Recipe:: host
 #
 
+cuckoo_user      = node[:cuckoo][:host][:user]
+cuckoo_user_home = node[:cuckoo][:host][:user_home]
+
 # Install support packages
 package 'git'
 
-# Install python
-include_recipe 'poise-python'
-python_runtime '2'
-
-# Install additional python packages
-%w{ python-dev libffi-dev libssl-dev }.each do |pkg|
-  package pkg
-end
+# Install python requirements
+include_recipe 'cuckoo::_python'
 
 # Install MongoDB for Django Web UI
 package 'mongodb'
 
-# TODO: Install Yara. Possibly Pydeep? https://downloads.cuckoosandbox.org/docs/installation/host/requirements.html
-
-# Install setcap command
+# Install setcap command for tcpdump permissions
 package 'libcap2-bin'
 
 # Install and set tcpdump permissions
@@ -32,22 +27,24 @@ execute 'set_tcpdump_permissions' do
 end
 
 # Add cuckoo user
-user 'cuckoo' do
-  comment 'Cuckoo User'
-  home    '/home/cuckoo'
+user cuckoo_user do
+  comment     'Cuckoo User'
+  home        cuckoo_user_home
+  manage_home true
 end
 
 # Clone latest cuckoo source code
-git '/home/cuckoo/cuckoo' do
-  repository 'https://github.com/cuckoosandbox/cuckoo.git'
-  revision   '1.2'
-  user       'cuckoo'
+git node[:cuckoo][:host][:source][:dest] do
+  repository node[:cuckoo][:host][:source][:repo]
+  revision   node[:cuckoo][:host][:source][:revision]
+  user       cuckoo_user
   action     :sync
 end
 
 # Install pip requirements
-pip_requirements '/home/cuckoo/cuckoo/requirements.txt'
+pip_requirements "#{node[:cuckoo][:host][:source][:dest]}/requirements.txt"
 
 # TODO: Install volatility: https://downloads.cuckoosandbox.org/docs/installation/host/requirements.html#installing-volatility
 # TODO: Add recipes for install kvm or vbox
 # TODO: Add cuckoo user to kvm or vbox group
+# TODO: Install Yara. Possibly Pydeep? https://downloads.cuckoosandbox.org/docs/installation/host/requirements.html
