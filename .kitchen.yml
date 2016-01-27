@@ -1,0 +1,27 @@
+---
+driver:
+  name: vagrant
+  provider: vmware_fusion
+
+provisioner:
+  name: chef_zero
+
+platforms:
+   - name: ubuntu-14.04
+     driver_config:
+       customize:
+         cpus: 2
+         memory: 2048
+       privileged: true
+       network:
+         # allow access to vm which is useful when troubleshooting
+         - ["forwarded_port", {guest: 80, host: 8080, auto_correct: true}]
+         - ["private_network", {ip: "33.33.33.15"}]
+
+suites:
+  - name: default
+    run_list: [
+      'recipe[apt::default]',
+      'recipe[cuckoo::default]'
+    ]
+    attributes:
