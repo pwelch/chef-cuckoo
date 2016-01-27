@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/LineLength
 #
 # Cookbook Name:: cuckoo
 # Spec:: default

@@ -14,10 +14,10 @@ calls = yes
 enabled = no
 
 [mongodb]
-enabled = no
-host = 127.0.0.1
-port = 27017
-db = cuckoo
+enabled = <%= @mongodb_enabled %>
+host = <%= @mongodb_host %>
+port = <%= @mongodb_port %>
+db = <%= @mongodb_db %>
 store_memdump = yes
 paginate = 100
 

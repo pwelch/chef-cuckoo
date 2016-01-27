@@ -8,6 +8,15 @@ Currently it just installs and configures basic Cuckoo.
 
 Future goals are to manage various sandbox hosts.
 
+## TODO
+
+- Manage Cuckoo Web App Django with Nginx instead of dev mode
+- install volatility
+- Install Yara and pydeep
+- Install cuckoo user into vbox group
+- Create recipes for guests
+- Create recipes for Windows guests
+
 ## Contributing
 
 1. Fork it ( https://github.com/pwelch/chef-cuckoo/fork )

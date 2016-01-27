@@ -12,9 +12,6 @@ package 'git'
 # Install python requirements
 include_recipe 'cuckoo::_python'
 
-# Install MongoDB for Django Web UI
-package 'mongodb'
-
 # Install setcap command for tcpdump permissions
 package 'libcap2-bin'
 
@@ -44,7 +41,20 @@ end
 # Install pip requirements
 pip_requirements "#{node[:cuckoo][:host][:source][:dest]}/requirements.txt"
 
-# TODO: Install volatility: https://downloads.cuckoosandbox.org/docs/installation/host/requirements.html#installing-volatility
-# TODO: Add recipes for install kvm or vbox
-# TODO: Add cuckoo user to kvm or vbox group
-# TODO: Install Yara. Possibly Pydeep? https://downloads.cuckoosandbox.org/docs/installation/host/requirements.html
+# Setup Cuckoo WebUI
+# TODO: Deploy as a proper Django App
+# TODO: Find a better way to manage service/restarting from templates
+include_recipe 'cuckoo::_webui'
+
+template "#{node[:cuckoo][:host][:source][:dest]}/conf/reporting.conf" do
+  source 'reporting.conf.erb'
+  owner cuckoo_user
+  group cuckoo_user
+  mode  '0644'
+  variables({
+    mongodb_enabled: true,
+    mongodb_host:    '127.0.0.1',
+    mongodb_port:    '27017',
+    mongodb_db:      'cuckoo'
+  })
+end

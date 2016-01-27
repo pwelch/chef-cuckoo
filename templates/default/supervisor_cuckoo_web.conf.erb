@@ -1,0 +1,9 @@
+[program:cuckoo]
+command=<%= @command %>
+directory=<%= @directory %>
+autostart=true
+autorestart=true
+startretries=3
+stderr_logfile=<%= @stderr_log %>
+stdout_logfile=<%= @stdout_log %>
+user=<%= @user %>

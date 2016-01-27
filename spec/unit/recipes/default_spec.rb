@@ -1,4 +1,4 @@
-#
+# rubocop:disable Metrics/LineLength
 # Cookbook Name:: cuckoo
 # Spec:: default
 #
@@ -11,13 +11,17 @@ describe 'cuckoo::default' do
       stub_command("getcap /usr/sbin/tcpdump | grep '/usr/sbin/tcpdump = cap_net_admin,cap_net_raw+eip'").and_return(true)
     end
 
-    let(:chef_run) do
+    cached(:chef_run) do
       runner = ChefSpec::ServerRunner.new
       runner.converge(described_recipe)
     end
 
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
+    end
+
+    it 'includes cuckoo::host recipe' do
+      expect(chef_run).to include_recipe('cuckoo::host')
     end
   end
 end
