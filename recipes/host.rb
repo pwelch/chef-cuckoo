@@ -38,7 +38,7 @@ git node[:cuckoo][:host][:source][:dest] do
   repository node[:cuckoo][:host][:source][:repo]
   revision   node[:cuckoo][:host][:source][:revision]
   user       cuckoo_user
-  action     :sync
+  action     :checkout
 end
 
 # Install pip requirements
