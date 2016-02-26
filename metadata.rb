@@ -1,6 +1,6 @@
 name             'cuckoo'
 maintainer       'Paul Welch'
-maintainer_email 'paul@pwelch.net'
+maintainer_email 'git@pwelch.net'
 license          'MIT'
 description      'Installs/Configures Cuckoo'
 long_description 'Installs/Configures Cuckoo'
