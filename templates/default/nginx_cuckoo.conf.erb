@@ -1,0 +1,33 @@
+# Chef managed. Local modifications will be lost.
+
+# the upstream component nginx needs to connect to
+upstream cuckoo {
+    # server unix:///path/to/your/mysite/mysite.sock; # for a file socket
+    server <%= @upstream %>; # for a web port socket (we'll use this first)
+}
+
+# configuration of the http server
+server {
+    # the port your site will be served on
+    listen      <%= @http_listen %>;
+    # the domain name or IP it will serve for
+    server_name <%= @server_name %>;
+    charset     utf-8;
+
+    # max upload size
+    client_max_body_size <%= @max_upload %>;
+
+    # Django media
+    # location /media  {
+    #    alias /path/to/your/mysite/media;
+    # }
+
+    location /static {
+        alias <%= @static_dir %>;
+    }
+
+    # Finally, send all non-media requests to the Django server.
+    location / {
+        proxy_pass http://cuckoo;
+    }
+}

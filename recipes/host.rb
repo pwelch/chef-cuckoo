@@ -35,6 +35,7 @@ git node[:cuckoo][:host][:source][:dest] do
   repository node[:cuckoo][:host][:source][:repo]
   revision   node[:cuckoo][:host][:source][:revision]
   user       cuckoo_user
+  group      cuckoo_user
   action     :checkout
 end
 
@@ -57,4 +58,13 @@ template "#{node[:cuckoo][:host][:source][:dest]}/conf/reporting.conf" do
     mongodb_port:    '27017',
     mongodb_db:      'cuckoo'
   })
+end
+
+if node[:cuckoo][:host][:vm][:install]
+  case node[:cuckoo][:host][:vm][:type]
+  when :virtualbox
+    include_recipe 'cuckoo::_virtualbox'
+  else
+    Chef::Log.warn("Unknown VM Type: #{node[:cuckoo][:host][:vm][:type]}. Nothing installed!")
+  end
 end
