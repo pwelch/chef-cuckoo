@@ -8,13 +8,14 @@ require 'spec_helper'
 
 describe 'cuckoo::host' do
   context 'When all attributes are default, on an unspecified platform' do
-    before(:each) do
+    before(:all) do
       stub_command("getcap /usr/sbin/tcpdump | grep '/usr/sbin/tcpdump = cap_net_admin,cap_net_raw+eip'").and_return(true)
       stub_command("getcap /usr/sbin/tcpdump | grep '/usr/sbin/tcpdump = cap_net_admin,cap_net_raw+eip'").and_return(true)
+      stub_command('test -L /etc/nginx/sites-enabled/default').and_return(true)
     end
 
-    let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new
+    cached(:chef_run) do
+      runner = ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '14.04')
       runner.converge(described_recipe)
     end
 

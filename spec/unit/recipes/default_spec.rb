@@ -9,6 +9,8 @@ describe 'cuckoo::default' do
   context 'When all attributes are default, on an unspecified platform' do
     before(:all) do
       stub_command("getcap /usr/sbin/tcpdump | grep '/usr/sbin/tcpdump = cap_net_admin,cap_net_raw+eip'").and_return(true)
+      stub_command("getcap /usr/sbin/tcpdump | grep '/usr/sbin/tcpdump = cap_net_admin,cap_net_raw+eip'").and_return(true)
+      stub_command('test -L /etc/nginx/sites-enabled/default').and_return(true)
     end
 
     cached(:chef_run) do
