@@ -43,8 +43,6 @@ end
 pip_requirements "#{node[:cuckoo][:host][:source][:dest]}/requirements.txt"
 
 # Setup Cuckoo WebUI
-# TODO: Deploy as a proper Django App
-# TODO: Find a better way to manage service/restarting from templates
 include_recipe 'cuckoo::_webui'
 
 template "#{node[:cuckoo][:host][:source][:dest]}/conf/reporting.conf" do
