@@ -23,7 +23,7 @@ default[:cuckoo][:web][:max_upload]    = '75M'
 # Virtualization
 default[:cuckoo][:host][:vm][:install] = true
 default[:cuckoo][:host][:vm][:type]    = :virtualbox
-case node['platform_family']
+case node[:platform_family]
 when 'debian', 'rhel', 'fedora'
-  default['virtualbox']['version'] = '5.0'
+  default[:virtualbox][:version] = '5.0'
 end

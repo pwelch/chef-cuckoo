@@ -14,6 +14,11 @@ execute 'supervisorctl_update' do
   action :nothing
 end
 
+# Use uwsgi
+python_package 'uwsgi' do
+  version '2.0.12'
+end
+
 # supvisor config for cuckoo uwsgi
 template '/etc/supervisor.d/cuckoo_web.conf' do
   source 'supervisor_cuckoo_web.conf.erb'
@@ -21,18 +26,13 @@ template '/etc/supervisor.d/cuckoo_web.conf' do
   group 'root'
   mode  '0644'
   variables({
-    command:    'uwsgi --ini /home/cuckoo/uwsgi.ini',
+    command:    '/usr/local/bin/uwsgi --ini /home/cuckoo/uwsgi.ini',
     directory:  node[:cuckoo][:host][:source][:dest] + '/web',
     user:       node[:cuckoo][:host][:user],
     stderr_log: '/var/log/cuckoo_web.err.log',
     stdout_log: '/var/log/cuckoo_web.out.log'
   })
-  notifies :run, 'execute[supervisorctl_update]', :immediately
-end
-
-# Use uwsgi
-python_package 'uwsgi' do
-  version '2.0.12'
+  notifies :run, 'execute[supervisorctl_update]', :delayed
 end
 
 # config for cuckoo uwsgi
@@ -46,7 +46,7 @@ template "#{node[:cuckoo][:host][:user_home]}/uwsgi.ini" do
     max_requests: node[:cuckoo][:web][:max_requests],
     http_socket:  node[:cuckoo][:web][:uwsgi_socket]
   })
-  notifies :run, 'execute[supervisorctl_update]', :immediately
+  notifies :run, 'execute[supervisorctl_update]', :delayed
 end
 
 # Use default nginx package to proxy to uwsgi
@@ -59,7 +59,7 @@ if node[:cuckoo][:web][:install_nginx]
   end
 
   # cuckoo nginx config to proxy uwsgi
-  template "/etc/nginx/sites-available/cuckoo.conf" do
+  template '/etc/nginx/sites-available/cuckoo.conf' do
     source 'nginx_cuckoo.conf.erb'
     owner  'root'
     group  'root'
