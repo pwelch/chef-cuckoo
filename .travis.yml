@@ -2,7 +2,7 @@ sudo: required
 addons:
   apt:
     sources:
-      - chef-stable-precise
+      - chef-stable-trusty
     packages:
       - chefdk
 # Don't `bundle install`
