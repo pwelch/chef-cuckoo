@@ -1,10 +1,4 @@
 sudo: required
-addons:
-  apt:
-    sources:
-      - chef-stable-trusty
-    packages:
-      - chefdk
 # Don't `bundle install`
 install: echo "skip bundle install"
 branches:
@@ -14,12 +8,10 @@ env:
   global:
     # Ignore warnings when running specs.
     - RUBYOPT="-W0"
-  matrix:
-    - CHEF_VERSION=latest
-matrix:
-  fast_finish: true
 # Ensure we make ChefDK's Ruby the default
 before_script:
+  # Install ChefDK
+  - curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -c current -P chefdk
   - eval "$(/opt/chefdk/bin/chef shell-init bash)"
   # We have to install chef-sugar for ChefSpec
   - /opt/chefdk/embedded/bin/chef gem install chef-sugar
