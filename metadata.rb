@@ -6,6 +6,9 @@ description      'Installs/Configures Cuckoo'
 long_description 'Installs/Configures Cuckoo'
 version          '0.1.0'
 
+source_url 'https://github.com/pwelch/chef-cuckoo' if respond_to?(:source_url)
+issues_url 'https://github.com/pwelch/chef-cuckoo/issues' if respond_to?(:issues_url)
+
 depends 'apt'
 depends 'poise-python'
 depends 'supervisor'
