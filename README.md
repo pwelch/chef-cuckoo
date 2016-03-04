@@ -1,4 +1,5 @@
 # Cuckoo
+[![Build Status](https://secure.travis-ci.org/pwelch/chef-cuckoo.svg)](http://travis-ci.org/pwelch/chef-cuckoo)
 
 Installs and configures [Cuckoo Malware Sandbox](https://cuckoosandbox.org/)
 
