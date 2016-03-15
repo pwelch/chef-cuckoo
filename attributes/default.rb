@@ -19,6 +19,9 @@ default[:cuckoo][:web][:http_listen]   = '80'
 default[:cuckoo][:web][:server_name]   = node[:ipaddress]
 default[:cuckoo][:web][:static_dir]    = node[:cuckoo][:web][:dir] + '/static'
 default[:cuckoo][:web][:max_upload]    = '75M'
+default[:cuckoo][:api][:dir]           = node[:cuckoo][:host][:source][:dest]
+default[:cuckoo][:api][:max_requests]  = '1000'
+default[:cuckoo][:api][:uwsgi_socket]  = '127.0.0.1:8080'
 
 # Virtualization
 default[:cuckoo][:host][:vm][:install] = true

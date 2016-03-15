@@ -32,18 +32,19 @@ end
 
 # Clone latest cuckoo source code
 git node[:cuckoo][:host][:source][:dest] do
-  repository node[:cuckoo][:host][:source][:repo]
-  revision   node[:cuckoo][:host][:source][:revision]
-  user       cuckoo_user
-  group      cuckoo_user
-  action     :checkout
+  repository      node[:cuckoo][:host][:source][:repo]
+  revision        node[:cuckoo][:host][:source][:revision]
+  checkout_branch node[:cuckoo][:host][:source][:revision]
+  user            cuckoo_user
+  group           cuckoo_user
+  action          :checkout
 end
 
 # Install pip requirements
 pip_requirements "#{node[:cuckoo][:host][:source][:dest]}/requirements.txt"
 
-# Setup Cuckoo WebUI
-include_recipe 'cuckoo::_webui'
+# Setup Cuckoo WebUI and API
+include_recipe 'cuckoo::_web'
 
 template "#{node[:cuckoo][:host][:source][:dest]}/conf/reporting.conf" do
   source 'reporting.conf.erb'

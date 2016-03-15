@@ -5,7 +5,21 @@ Installs and configures [Cuckoo Malware Sandbox](https://cuckoosandbox.org/)
 
 ## Overview
 
-Currently it just installs and configures basic Cuckoo.
+Currently it just installs and configures basic Cuckoo Host.
+
+## Usage
+
+Add the default recipe to the node run list:
+```
+run_list(
+  "recipe[apt]",
+  "recipe[cuckoo::default]"
+)
+```
+
+Cuckoo Sandbox Resources will be available at these locations:
+- Cuckoo Web: http://NODE_IP_ADDRESS/
+- Cuckoo API: http://NODE_IP_ADDRESS/api/cuckoo/status
 
 ## Contributing
 

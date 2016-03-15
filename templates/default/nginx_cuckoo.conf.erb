@@ -1,9 +1,13 @@
 # Chef managed. Local modifications will be lost.
 
 # the upstream component nginx needs to connect to
-upstream cuckoo {
+upstream <%= @upstream_web_name %> {
     # server unix:///path/to/your/mysite/mysite.sock; # for a file socket
-    server <%= @upstream %>; # for a web port socket (we'll use this first)
+    server <%= @upstream_web %>; # for a web port socket (we'll use this first)
+}
+
+upstream <%= @upstream_api_name %> {
+    server <%= @upstream_api %>; # for a web port socket (we'll use this first)
 }
 
 # configuration of the http server
@@ -26,8 +30,20 @@ server {
         alias <%= @static_dir %>;
     }
 
+    # API requests to Flask app: http://IP_ADDR/api/tasks/list
+    location /api {
+      rewrite /api/(.*)$ /$1 break;
+      proxy_set_header  X-Real-IP       $remote_addr;
+      proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header  Host            $http_host;
+      proxy_pass http://<%= @upstream_api_name %>;
+    }
+
     # Finally, send all non-media requests to the Django server.
     location / {
-        proxy_pass http://cuckoo;
+      proxy_set_header  X-Real-IP       $remote_addr;
+      proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header  Host            $http_host;
+      proxy_pass http://<%= @upstream_web_name %>;
     }
 }
