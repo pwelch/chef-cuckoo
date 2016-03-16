@@ -1,9 +1,17 @@
 [uwsgi]
 chdir=<%= @dir %>
-module=web.wsgi
-master=True
-pidfile=/tmp/cuckoo-web.pid
-vacuum=True
+pidfile=<%= @pidfile %>
 max-requests=<%= @max_requests %>
 http=<%= @http_socket %>
+<% if @module %>
+module=<%= @module %>
+<% end %>
+<% if @file %>
+file=<%= @file %>
+<% end %>
+<% if @callable %>
+callable=<%= @callable %>
+<% end %>
+master=True
+vacuum=True
 harakiri=30

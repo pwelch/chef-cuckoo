@@ -2,10 +2,11 @@
 # Cookbook Name:: cuckoo
 # Spec:: default
 #
+# rubocop:disable Metrics/LineLength
 
 require 'spec_helper'
 
-describe 'cuckoo::_webui' do
+describe 'cuckoo::_web' do
   context 'When all attributes are default, on an ubuntu platform' do
     cached(:chef_run) do
       runner = ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '14.04')
@@ -28,26 +29,52 @@ describe 'cuckoo::_webui' do
       expect(chef_run).to include_recipe('supervisor::default')
     end
 
-    it 'installs the uwsgi python package' do
-      expect(chef_run).to install_python_package('uwsgi')
+    context 'the Cuckoo Web UI' do
+      it 'installs the uwsgi python package' do
+        expect(chef_run).to install_python_package('uwsgi')
+      end
+
+      it 'creates the supervisor.d cuckoo_web config' do
+        expect(chef_run).to create_template('/etc/supervisor.d/cuckoo_web.conf').with(
+          source: 'supervisor_cuckoo_web.conf.erb',
+          owner:  'root',
+          group:  'root',
+          mode:   '0644'
+        )
+      end
+
+      it 'creates the uwsgi.ini config' do
+        expect(chef_run).to create_template("#{chef_run.node.cuckoo.host.user_home}/uwsgi.ini").with(
+          source: 'cuckoo_webui_uwsgi.ini.erb',
+          owner:  'cuckoo',
+          group:  'cuckoo',
+          mode:   '0644'
+        )
+      end
     end
 
-    it 'creates the supervisor.d cuckoo_web config' do
-      expect(chef_run).to create_template('/etc/supervisor.d/cuckoo_web.conf').with(
-        source: 'supervisor_cuckoo_web.conf.erb',
-        owner:  'root',
-        group:  'root',
-        mode:   '0644'
-      )
-    end
+    context 'the Cuckoo Web API' do
+      it 'installs the Flask Python package' do
+        expect(chef_run).to install_python_package('Flask')
+      end
 
-    it 'creates the uwsgi.ini config' do
-      expect(chef_run).to create_template("#{chef_run.node.cuckoo.host.user_home}/uwsgi.ini").with(
-        source: 'cuckoo_webui_uwsgi.ini.erb',
-        owner:  'cuckoo',
-        group:  'cuckoo',
-        mode:   '0644'
-      )
+      it 'creates the supervisor.d cuckoo_api config' do
+        expect(chef_run).to create_template('/etc/supervisor.d/cuckoo_api.conf').with(
+          source: 'supervisor_cuckoo_web.conf.erb',
+          owner:  'root',
+          group:  'root',
+          mode:   '0644'
+        )
+      end
+
+      it 'creates the uwsgi_api.ini config' do
+        expect(chef_run).to create_template("#{chef_run.node.cuckoo.host.user_home}/uwsgi_api.ini").with(
+          source: 'cuckoo_webui_uwsgi.ini.erb',
+          owner:  'cuckoo',
+          group:  'cuckoo',
+          mode:   '0644'
+        )
+      end
     end
 
     context 'the Cuckoo cookbook manages Nginx' do
