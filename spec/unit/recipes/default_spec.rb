@@ -11,6 +11,7 @@ describe 'cuckoo::default' do
       stub_command("getcap /usr/sbin/tcpdump | grep '/usr/sbin/tcpdump = cap_net_admin,cap_net_raw+eip'").and_return(true)
       stub_command("getcap /usr/sbin/tcpdump | grep '/usr/sbin/tcpdump = cap_net_admin,cap_net_raw+eip'").and_return(true)
       stub_command('test -L /etc/nginx/sites-enabled/default').and_return(true)
+      stub_command('/usr/bin/vboxmanage list extpacks | grep 5.0.16').and_return(true)
     end
 
     cached(:chef_run) do
