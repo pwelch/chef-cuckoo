@@ -11,7 +11,7 @@ platforms:
      driver_config:
        customize:
          cpus: 2
-         memory: 2048
+         memory: 4096
        privileged: true
        network:
          # allow access to vm which is useful when troubleshooting
@@ -22,6 +22,7 @@ suites:
   - name: default
     run_list: [
       'recipe[apt::default]',
-      'recipe[cuckoo::default]'
+      'recipe[cuckoo::default]',
+      'recipe[cuckoo_test::default]'
     ]
     attributes:

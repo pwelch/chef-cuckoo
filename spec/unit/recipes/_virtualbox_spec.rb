@@ -12,6 +12,10 @@ describe 'cuckoo::_virtualbox' do
       runner.converge(described_recipe)
     end
 
+    before(:all) do
+      stub_command('/usr/bin/vboxmanage list extpacks | grep 5.0.16').and_return(false)
+    end
+
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end

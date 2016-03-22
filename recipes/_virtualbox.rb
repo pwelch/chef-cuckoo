@@ -25,3 +25,22 @@ group 'vboxusers' do
   append  true
   action  :modify
 end
+
+# Install VBoxVRDP extension pack
+if node[:cuckoo][:virtualbox][:extpack][:install]
+  src_url       = node[:cuckoo][:virtualbox][:extpack][:url_path]
+  src_cachepath = node[:cuckoo][:virtualbox][:extpack][:file_path]
+  src_filepath  = node[:cuckoo][:virtualbox][:extpack][:file_path]
+  extpack_ver   = node[:cuckoo][:virtualbox][:extpack][:version]
+
+  remote_file src_url do
+    source   src_url
+    path     src_cachepath
+    checksum node[:cuckoo][:virtualbox][:extpack][:sha256sum]
+  end
+
+  execute 'vbox_extpack_install' do
+    command "/usr/bin/vboxmanage extpack install #{src_filepath}"
+    not_if  "/usr/bin/vboxmanage list extpacks | grep #{extpack_ver}"
+  end
+end
