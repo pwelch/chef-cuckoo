@@ -21,6 +21,10 @@ Cuckoo Sandbox Resources will be available at these locations:
 - Cuckoo Web: http://NODE_IP_ADDRESS/
 - Cuckoo API: http://NODE_IP_ADDRESS/api/cuckoo/status
 
+## Documentation
+
+See the [repo wiki](https://github.com/pwelch/chef-cuckoo/wiki) for documentation resources.
+
 ## Contributing
 
 1. Fork it ( https://github.com/pwelch/chef-cuckoo/fork )
