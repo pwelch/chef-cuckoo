@@ -4,7 +4,7 @@ maintainer_email 'git@pwelch.net'
 license          'MIT'
 description      'Installs/Configures Cuckoo Malware Sandbox'
 long_description 'Installs/Configures Cuckoo Malware Sandbox'
-version          '0.2.0'
+version          '0.3.0'
 
 source_url 'https://github.com/pwelch/chef-cuckoo' if respond_to?(:source_url)
 issues_url 'https://github.com/pwelch/chef-cuckoo/issues' if respond_to?(:issues_url)
